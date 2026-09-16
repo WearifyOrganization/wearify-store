@@ -1,0 +1,564 @@
+/* Store dashboard (/store) — extracted from the page's styled-jsx block so the
+   markup can be split into components. Scoped under .store-shell like the rest
+   of store-theme.css. Layout numbers are the Surface Pro 8 handoff's
+   (1280x1097, 1003px content column at x=253). */
+
+/* ── Page ─────────────────────────────────────────────────────────── */
+.store-shell .hm {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  color: #222222;
+}
+
+/* Shared card chrome: white, hairline, 10px, two-part shadow with a light
+   inner lip along the bottom. */
+.store-shell .hm-card {
+  background: #ffffff;
+  border: 1px solid #d9d9d9;
+  border-radius: 10px;
+  box-shadow:
+    0 1.58px 2.36px rgba(16, 16, 16, 0.16),
+    inset 0 -3.15px 3.15px rgba(255, 255, 255, 0.6);
+}
+.store-shell .hm-card-title {
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 23px;
+  color: #161922;
+  padding: 19px 16px 19px 19px;
+}
+
+/* ── Header ───────────────────────────────────────────────────────── */
+.store-shell .hm-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding: 4px 0 6px;
+}
+.store-shell .hm-head-text {
+  min-width: 0;
+}
+.store-shell .hm-eyebrow {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: #727272;
+}
+.store-shell .hm-eyebrow-dot {
+  color: #cb857c;
+}
+.store-shell .hm-title {
+  margin-top: 6px;
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 34px;
+  color: #161922;
+}
+.store-shell .hm-sub {
+  margin-top: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #727272;
+}
+.store-shell .hm-sub strong {
+  color: var(--w-maroon-l);
+  font-weight: 700;
+}
+.store-shell .hm-sub-dot {
+  color: #cb857c;
+  margin: 0 4px;
+}
+
+.store-shell .hm-controls {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  flex-shrink: 0;
+}
+.store-shell .hm-period {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  height: 39.44px;
+  padding: 0 13px;
+  border: 1px solid #727272;
+  border-radius: 10px;
+  background: #fff;
+  color: #222222;
+  font-size: 11.34px;
+  font-weight: 500;
+  line-height: 19px;
+  cursor: pointer;
+}
+/* Real <select> laid transparently over the styled face so the control stays a
+   native, keyboard-accessible picker. */
+.store-shell .hm-period select {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+  font-family: inherit;
+}
+.store-shell .hm-period-text {
+  pointer-events: none;
+}
+.store-shell .hm-reset {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  height: 39.44px;
+  padding: 0 16px;
+  border: none;
+  border-radius: 10px;
+  background: var(--w-maroon-l);
+  color: #fff;
+  font-family: inherit;
+  font-size: 12.6px;
+  font-weight: 500;
+  line-height: 20px;
+  cursor: pointer;
+  transition: background 0.18s var(--w-ease);
+}
+.store-shell .hm-reset:hover {
+  background: var(--w-maroon-d);
+}
+
+/* ── KPI row ──────────────────────────────────────────────────────── */
+.store-shell .hm-kpis {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+.store-shell .hm-kpi {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 124.85px;
+  padding: 19.44px;
+}
+.store-shell .hm-kpi-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 5px;
+  min-width: 0;
+  padding-top: 4px;
+}
+.store-shell .hm-kpi-value {
+  font-size: 32px;
+  font-weight: 600;
+  line-height: 32px;
+  color: #161922;
+}
+.store-shell .hm-kpi-label {
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 18px;
+  color: #222222;
+  opacity: 0.6;
+}
+.store-shell .hm-kpi-badge {
+  align-self: flex-start;
+  padding: 2px 8px;
+  border-radius: 30px;
+  background: #ddf3e9;
+  color: #27741e;
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 18px;
+}
+.store-shell .hm-kpi-icon {
+  width: 54px;
+  height: 54px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  background: var(--w-maroon-l);
+  color: #fff;
+}
+
+/* ── Store health ─────────────────────────────────────────────────── */
+.store-shell .hm-health-body {
+  display: flex;
+  align-items: center;
+  gap: 36px;
+  padding: 0 16px 19px 19px;
+}
+.store-shell .hm-ring {
+  position: relative;
+  width: 124px;
+  height: 124px;
+  flex-shrink: 0;
+}
+.store-shell .hm-ring-mid {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+}
+.store-shell .hm-ring-pct {
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 24px;
+  color: #000;
+}
+.store-shell .hm-ring-cap {
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 14px;
+  color: #727272;
+}
+.store-shell .hm-ring-band {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 14px;
+}
+.store-shell .hm-ring-band--good {
+  color: #27741e;
+}
+.store-shell .hm-ring-band--warn {
+  color: var(--w-maroon-l);
+}
+.store-shell .hm-ring-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.store-shell .hm-bars {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+.store-shell .hm-bar-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.store-shell .hm-bar-dot {
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: #cb857c;
+}
+.store-shell .hm-bar-label {
+  width: 62px;
+  flex-shrink: 0;
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 15px;
+  color: #222222;
+}
+.store-shell .hm-bar-track {
+  flex: 1;
+  min-width: 0;
+  height: 10px;
+  border-radius: 50px;
+  background: #d9d9d9;
+  overflow: hidden;
+}
+.store-shell .hm-bar-fill {
+  display: block;
+  height: 100%;
+  border-radius: 50px;
+  background: var(--w-maroon-l);
+  transition: width 0.9s var(--w-ease);
+}
+.store-shell .hm-bar-pct {
+  width: 28px;
+  flex-shrink: 0;
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 15px;
+  color: #222222;
+}
+.store-shell .hm-pill {
+  width: 88px;
+  flex-shrink: 0;
+  padding: 5px 0;
+  border-radius: 4px;
+  text-align: center;
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 13px;
+}
+.store-shell .hm-pill--good {
+  background: #edfffa;
+  color: #27741e;
+}
+.store-shell .hm-pill--warn {
+  background: #f6cbb7;
+  color: var(--w-maroon-l);
+}
+
+/* ── Quick actions / needs attention ──────────────────────────────── */
+.store-shell .hm-split {
+  display: grid;
+  grid-template-columns: minmax(0, 629fr) minmax(0, 358fr);
+  gap: 16px;
+}
+.store-shell .hm-qa-grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 16px;
+  padding: 0 19px 19px;
+}
+.store-shell .hm-qa-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 82px;
+  padding: 10px 4px;
+  border: 1px solid #727272;
+  border-radius: 12px;
+  background: #faf7f4;
+  font-family: inherit;
+  cursor: pointer;
+  transition:
+    border-color 0.18s var(--w-ease),
+    transform 0.18s var(--w-spring);
+}
+.store-shell .hm-qa-tile:hover {
+  border-color: var(--w-maroon-l);
+  transform: translateY(-2px);
+}
+.store-shell .hm-qa-disc {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--w-maroon-l);
+  color: #fff;
+}
+.store-shell .hm-qa-label {
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 13px;
+  color: #222222;
+  text-align: center;
+}
+
+.store-shell .hm-attn {
+  position: relative;
+  overflow: hidden;
+}
+.store-shell .hm-attn-body {
+  display: flex;
+  padding: 0 19px 19px;
+}
+.store-shell .hm-attn-text {
+  position: relative;
+  z-index: 1;
+  max-width: 62%;
+}
+.store-shell .hm-attn-title {
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 13px;
+  color: #000;
+}
+.store-shell .hm-attn-copy {
+  margin-top: 4px;
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 13px;
+  color: #727272;
+}
+.store-shell .hm-attn-link {
+  margin-top: 18px;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 4px;
+  background: #edfffa;
+  color: #27741e;
+  font-family: inherit;
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 13px;
+  cursor: pointer;
+}
+.store-shell .hm-attn-link:hover {
+  background: #ddf3e9;
+}
+.store-shell .hm-attn-art {
+  position: absolute;
+  right: -6px;
+  bottom: -14px;
+  pointer-events: none;
+}
+
+/* ── Recent sessions ──────────────────────────────────────────────── */
+.store-shell .hm-sessions {
+  overflow: hidden;
+  padding: 0;
+}
+.store-shell .hm-sessions-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 9px 16px 9px 19px;
+  background: var(--w-maroon-l);
+}
+.store-shell .hm-sessions-head h2 {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  color: #fff;
+}
+.store-shell .hm-sessions-head button {
+  padding: 5px 12px;
+  border: none;
+  border-radius: 6px;
+  background: #faf7f4;
+  color: var(--w-maroon-l);
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.store-shell .hm-sessions-empty {
+  padding: 28px 19px;
+  font-size: 12px;
+  color: #727272;
+}
+.store-shell .hm-table-wrap {
+  overflow-x: auto;
+}
+.store-shell .hm-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.store-shell .hm-table th {
+  padding: 12px 19px;
+  text-align: left;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: #727272;
+  border-bottom: 1px solid #eeeeee;
+  white-space: nowrap;
+}
+.store-shell .hm-table td {
+  padding: 14px 19px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #222222;
+  border-bottom: 1px solid #f3f6f7;
+  white-space: nowrap;
+}
+.store-shell .hm-table tbody tr:last-child td {
+  border-bottom: none;
+}
+.store-shell .hm-status {
+  display: inline-block;
+  padding: 3px 12px;
+  border-radius: 30px;
+  font-size: 10px;
+  font-weight: 600;
+}
+.store-shell .hm-status--active {
+  background: #ddf3e9;
+  color: #27741e;
+}
+.store-shell .hm-status--done {
+  background: #f6cbb7;
+  color: var(--w-maroon-l);
+}
+
+/* ── Reflow ───────────────────────────────────────────────────────── */
+@media (max-width: 1180px) {
+  .store-shell .hm-split {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .store-shell .hm-attn-text {
+    max-width: 70%;
+  }
+}
+@media (max-width: 1080px) {
+  .store-shell .hm-kpis {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .store-shell .hm-health-body {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 20px;
+  }
+  .store-shell .hm-ring {
+    align-self: center;
+  }
+  .store-shell .hm-bar-label {
+    width: 56px;
+  }
+  .store-shell .hm-pill {
+    width: 78px;
+  }
+}
+@media (max-width: 860px) {
+  .store-shell .hm-qa-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+@media (max-width: 700px) {
+  .store-shell .hm-title {
+    font-size: 23px;
+    line-height: 29px;
+  }
+  .store-shell .hm-controls {
+    width: 100%;
+  }
+  .store-shell .hm-period,
+  .store-shell .hm-reset {
+    flex: 1;
+  }
+  .store-shell .hm-bar-dot {
+    display: none;
+  }
+  .store-shell .hm-bar-pct {
+    width: 26px;
+  }
+  .store-shell .hm-pill {
+    display: none;
+  }
+}
+@media (max-width: 560px) {
+  .store-shell .hm-kpis {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .store-shell .hm-kpi {
+    min-height: 0;
+  }
+  .store-shell .hm-qa-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .store-shell .hm-attn-text {
+    max-width: 100%;
+  }
+  .store-shell .hm-attn-art {
+    opacity: 0.35;
+  }
+}

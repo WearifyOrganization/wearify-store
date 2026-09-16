@@ -1,0 +1,3277 @@
+/* ============================================================
+   WEARIFY  —  store-theme.css
+   The /tablet design language, wearing the store's class names.
+   Colours, type and shape are sourced from app/tablet/tablet-theme.css;
+   the --w-* token NAMES are kept because ~300 inline styles across the
+   pages ask for them by name. Fonts load via next/font in layout.tsx.
+   ============================================================ */
+
+/* ── Tokens ──────────────────────────────────────────────────────── */
+:root {
+  /* Ink — the tablet's neutral ramp (--t-ink / --t-sub / --t-muted) */
+  --w-ink: #000000;
+  --w-ink-mid: #333333;
+  --w-ink-soft: #545454;
+  --w-ink-muted: #727272;
+  --w-ink-ghost: #9E9E9E;
+
+  /* Canvas / surface — ivory, not cream (--t-ivory) */
+  --w-cream: #FBF8F3;            /* page base */
+  --w-cream-deep: #F5F0E8;       /* hover mat */
+  --w-surface: #FFFFFF;          /* card surface */
+  --w-surface-soft: #FBF8F3;
+  --w-cream-border: #D9D9D9;     /* --t-border */
+  --w-cream-hover: #F5F0E8;
+  --w-border-l: #EEEEEE;         /* --t-border-in */
+
+  /* Brand — the tablet's two maroons: action (#71221D) and chrome (#68262A) */
+  --w-maroon: #71221D;
+  --w-maroon-l: #68262A;         /* was a lighter tint; now the chrome maroon,
+                                    which flattens the old gradients on purpose */
+  --w-maroon-d: #5E1C17;
+  --w-maroon-ghost: #FCE7E9;
+  --w-maroon-soft: rgba(113, 34, 29, 0.08);
+  --w-primary: #71221D;          /* alias → maroon */
+
+  /* Secondary / data-viz — the tablet has no navy, so this is a maroon tint
+     ramp. Charts stay monochrome; the names survive for ~16 inline callers. */
+  --w-navy: #68262A;
+  --w-navy-mid: #9A5A50;
+  --w-navy-l: #C39A94;
+  --w-navy-soft: rgba(104, 38, 42, 0.08);
+  /* teal retired → folded onto the ramp (back-compat alias) */
+  --w-teal: #68262A;
+  --w-teal-soft: rgba(104, 38, 42, 0.10);
+
+  /* Accent — gold, rationed like the tablet: badges, ratings, rules only */
+  --w-gold: #D4A843;
+  --w-gold-bright: #E2BC63;
+  --w-gold-pale: #F3E3B8;
+  --w-gold-mist: rgba(212, 168, 67, 0.18);
+  --w-gold-glow: rgba(212, 168, 67, 0.22);
+
+  /* Status */
+  --w-success: #2D8544;
+  --w-success-bg: rgba(45, 133, 68, 0.12);
+  --w-warn: #9A7B18;
+  --w-warn-bg: rgba(212, 168, 67, 0.18);
+  --w-danger: #C0392B;
+  --w-danger-bg: rgba(192, 57, 43, 0.10);
+
+  /* Decoration retired (kept as neutral no-ops for back-compat refs) */
+  --w-noise: none;
+  --w-inset: 0 0 #0000;
+
+  /* Shadows — warm brown, never neutral black (the tablet's recipes) */
+  --w-shadow-xs: 0 2px 10px rgba(60, 36, 22, 0.04);
+  --w-shadow-sm: 0 2px 6px rgba(60, 36, 22, 0.06), 0 1px 2px rgba(60, 36, 22, 0.04);
+  --w-shadow-md: 0 12px 26px rgba(60, 36, 22, 0.10);
+  --w-shadow-lg: 0 22px 60px rgba(60, 36, 22, 0.10), 0 2px 6px rgba(60, 36, 22, 0.04);
+  --w-shadow-gold: 0 4px 24px rgba(212, 168, 67, 0.18);
+  --w-shadow-maroon: 0 6px 16px rgba(113, 34, 29, 0.18);
+
+  /* Radii — the tablet tops out at 16px; the 22/30px sheets come down to it */
+  --w-r-xs: clamp(6px, 0.6vw, 9px);
+  --w-r-sm: clamp(8px, 0.8vw, 11px);
+  --w-r-md: clamp(12px, 1.15vw, 16px);
+  --w-r-lg: clamp(12px, 1.15vw, 16px);
+  --w-r-xl: clamp(12px, 1.15vw, 16px);
+  --w-r-pill: 9999px;
+
+  /* Type scale — fluid, like the tablet's. Tune the vw term to shift a step. */
+  --w-fs-2xs: clamp(10px, 0.95vw, 13px);
+  --w-fs-xs: clamp(12px, 1.05vw, 15px);
+  --w-fs-sm: clamp(13px, 1.20vw, 16px);
+  --w-fs-base: clamp(15px, 1.35vw, 19px);
+  --w-fs-md: clamp(17px, 1.55vw, 22px);
+  --w-fs-lg: clamp(20px, 1.90vw, 27px);
+  --w-fs-xl: clamp(24px, 2.40vw, 34px);
+  --w-fs-2xl: clamp(28px, 2.90vw, 40px);
+  --w-fs-3xl: clamp(34px, 3.80vw, 52px);
+
+  /* Spacing scale — unchanged; the tablet has none to port and 117 inline
+     styles ask for these by name. */
+  --w-sp-1: 4px;
+  --w-sp-2: 8px;
+  --w-sp-3: 12px;
+  --w-sp-4: 16px;
+  --w-sp-5: 24px;
+  --w-sp-6: 32px;
+  --w-sp-7: 48px;
+
+  /* Layout */
+  --w-topbar-h: 80px;                        /* handoff: fixed 80 */
+  --w-footer-h: clamp(24px, 2.4vw, 32px);    /* --t-footer-h */
+  --w-bottomnav-h: 72px;                     /* mobile only; no tablet analogue */
+  --w-rail-w: 223px;                         /* navbar handoff: fixed, not fluid */
+  --w-rail-pad: 7px;                         /* (223 - 209 item) / 2 */
+  --w-content-max: none;                     /* a cap would leave dead gutters */
+
+  /* Easing */
+  --w-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --w-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --w-ease-out: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .store-shell, .store-shell *, .store-shell *::before, .store-shell *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* ── Reset & Base ─────────────────────────────────────────────────────
+   Scoped to .store-shell so these rules can never leak onto other routes.
+   Next/Turbopack keeps a route's global-CSS chunk loaded after you navigate
+   back across route groups; an UNLAYERED universal reset (`*{margin:0}`)
+   would then override Tailwind v4's layered utilities on the landing page
+   and crush its spacing. Scoping confines it to the store shell. */
+.store-shell,
+.store-shell *,
+.store-shell *::before,
+.store-shell *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.store-shell {
+  min-height: 100vh;
+  /* Canvas gradient from the handoff: peach at the top-left corner of the
+     frame washing out to ivory at the bottom-right. Anchored to the viewport
+     (not the document) so a long page doesn't stretch the ramp — the design
+     draws it once across the 1280x800 frame. */
+  background: linear-gradient(111.34deg, #F6CBB7 0%, #FAF7F4 100%) fixed;
+  color: var(--w-ink);
+  font-family: var(--w-font), 'Montserrat', system-ui, sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Typography helpers ───────────────────────────────────────────── */
+/* .w-serif is a leftover from the Cormorant era — the module is single-family
+   now, so it only has to undo the italic that six pages still set inline.
+   ponytail: !important beats those inline styles; the alternative is six TSX
+   edits for a class that will be deleted once the pages stop asking for it. */
+.w-serif,
+.w-display {
+  font-style: normal !important;
+}
+
+.w-serif {
+  font-family: var(--w-font), 'Montserrat', sans-serif;
+}
+
+.w-mono {
+  font-family: var(--w-font-num), 'Space Grotesk', monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+.w-display {
+  font-family: var(--w-font-display), 'Poppins', sans-serif;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  color: var(--w-ink);
+}
+
+/* ── Core card ────────────────────────────────────────────────────── */
+.w-card {
+  background: var(--w-surface);
+  border: 1px solid var(--w-cream-border);
+  border-radius: var(--w-r-md);
+  box-shadow: var(--w-shadow-xs);
+  overflow: hidden;
+  position: relative;
+}
+
+/* Soft / padded card variants */
+.w-card-soft {
+  background: var(--w-surface-soft);
+  border: 1px solid var(--w-cream-border);
+  border-radius: var(--w-r-md);
+}
+
+.w-card-padded {
+  padding: var(--w-sp-5);
+}
+
+/* .w-card-gold kept as an inert alias — the tablet has no accent stripes, and
+   eight pages still ask for the class. */
+
+/* Glass card — the tablet has no blurred surfaces; this is a plain card. */
+.w-card-glass {
+  background: var(--w-surface);
+  border: 1px solid var(--w-cream-border);
+  border-radius: var(--w-r-md);
+  box-shadow: var(--w-shadow-xs);
+}
+
+/* ── Buttons ──────────────────────────────────────────────────────── */
+.w-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: var(--w-font), 'Montserrat', system-ui, sans-serif;
+  font-weight: 600;
+  font-size: var(--w-fs-sm);
+  border: 1px solid transparent;
+  cursor: pointer;
+  border-radius: var(--w-r-sm);
+  padding: 10px 20px;
+  min-height: 42px;
+  transition: transform 0.18s var(--w-ease), box-shadow 0.18s var(--w-ease), background 0.18s var(--w-ease), filter 0.18s var(--w-ease);
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+
+.w-btn:active {
+  transform: scale(0.97);
+}
+
+.w-btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--w-maroon-ghost);
+}
+
+.w-btn-primary {
+  background: var(--w-maroon);
+  color: #fff;
+  box-shadow: var(--w-shadow-maroon);
+}
+
+.w-btn-primary:hover {
+  background: var(--w-maroon-d);
+}
+
+/* Secondary action — the chrome maroon */
+.w-btn-navy {
+  background: var(--w-maroon-l);
+  color: #fff;
+}
+
+.w-btn-navy:hover {
+  background: var(--w-maroon-d);
+}
+
+.w-btn-gold {
+  background: var(--w-gold);
+  color: #fff;
+}
+
+.w-btn-gold:hover {
+  filter: brightness(0.95);
+}
+
+/* Ghost — quiet maroon */
+.w-btn-ghost {
+  background: transparent;
+  color: var(--w-maroon);
+  border-color: transparent;
+}
+
+.w-btn-ghost:hover {
+  background: var(--w-maroon-soft);
+}
+
+/* Outline — the tablet's .t-btn-ghost */
+.w-btn-outline {
+  background: var(--w-surface);
+  color: var(--w-ink);
+  border-color: #B9B9B9;
+  font-weight: 500;
+}
+
+.w-btn-outline:hover {
+  background: var(--w-cream-deep);
+}
+
+.w-btn-danger {
+  background: var(--w-danger);
+  color: #fff;
+}
+
+.w-btn-danger:hover {
+  filter: brightness(0.92);
+}
+
+.w-btn-danger-outline {
+  background: var(--w-surface);
+  color: var(--w-danger);
+  border-color: var(--w-danger-bg);
+}
+
+.w-btn-danger-outline:hover {
+  border-color: var(--w-danger);
+  background: var(--w-danger-bg);
+}
+
+.w-btn-block {
+  width: 100%;
+}
+
+.w-btn-sm {
+  font-size: var(--w-fs-xs);
+  padding: 7px 14px;
+  min-height: 34px;
+}
+
+.w-btn-lg {
+  font-size: var(--w-fs-base);
+  padding: 13px 26px;
+  min-height: 50px;
+}
+
+.w-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  filter: none;
+  transform: none;
+}
+
+/* ── Badges ───────────────────────────────────────────────────────── */
+.w-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 9px;
+  border-radius: var(--w-r-pill);
+  font-size: var(--w-fs-2xs);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.w-badge-success {
+  background: var(--w-success-bg);
+  color: var(--w-success);
+}
+
+.w-badge-warn {
+  background: var(--w-warn-bg);
+  color: var(--w-warn);
+}
+
+.w-badge-danger {
+  background: var(--w-danger-bg);
+  color: var(--w-danger);
+}
+
+.w-badge-gold {
+  background: var(--w-gold-mist);
+  color: var(--w-gold);
+}
+
+.w-badge-teal {
+  background: var(--w-teal-soft);
+  color: var(--w-teal);
+}
+
+.w-badge-navy {
+  background: #F1ECE4;
+  color: var(--w-ink-soft);
+}
+
+/* ── Inputs ───────────────────────────────────────────────────────── */
+.w-input,
+.w-select {
+  width: 100%;
+  padding: 11px 15px;
+  font-family: var(--w-font), 'Montserrat', system-ui, sans-serif;
+  font-size: var(--w-fs-sm);
+  color: var(--w-ink);
+  background: #fff;
+  border: 1.6px solid var(--w-border-l);
+  border-radius: var(--w-r-md);
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.w-input:focus,
+.w-select:focus {
+  border-color: var(--w-maroon);
+  box-shadow: 0 0 0 3px rgba(113, 34, 29, 0.12);
+}
+
+.w-input::placeholder {
+  color: var(--w-ink-ghost);
+}
+
+/* ── Divider ──────────────────────────────────────────────────────── */
+.w-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--w-cream-border) 20%, var(--w-cream-border) 80%, transparent);
+  margin: 16px 0;
+}
+
+/* ── Gold rule ────────────────────────────────────────────────────── */
+.w-rule-gold {
+  height: 1px;
+  background: linear-gradient(90deg, var(--w-gold), var(--w-gold-bright) 50%, transparent 100%);
+  opacity: 0.5;
+}
+
+/* ── Progress bar ─────────────────────────────────────────────────── */
+.w-progress {
+  height: 5px;
+  border-radius: var(--w-r-pill);
+  background: var(--w-cream-border);
+  overflow: hidden;
+}
+
+.w-progress-fill {
+  height: 100%;
+  border-radius: var(--w-r-pill);
+  transition: width 0.9s var(--w-spring);
+}
+
+/* ── Toast ────────────────────────────────────────────────────────── */
+.w-toast {
+  position: fixed;
+  bottom: calc(var(--w-bottomnav-h) + 16px);
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 11px 24px;
+  border-radius: var(--w-r-pill);
+  background: var(--w-navy);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  z-index: 100;
+  box-shadow: var(--w-shadow-lg);
+  animation: w-toast-up 0.35s var(--w-spring) forwards;
+}
+
+@keyframes w-toast-up {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+/* ── Pill filter ──────────────────────────────────────────────────── */
+.w-pill {
+  padding: 7px 16px;
+  border-radius: var(--w-r-pill);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1.5px solid var(--w-cream-border);
+  background: #fff;
+  color: var(--w-ink-soft);
+  transition: all 0.18s var(--w-spring);
+  white-space: nowrap;
+}
+
+.w-pill.active {
+  background: var(--w-maroon);
+  color: #fff;
+  border-color: var(--w-maroon);
+  box-shadow: 0 3px 12px rgba(113, 34, 29, 0.22);
+}
+
+/* ============================================================
+   LAYOUT — TopBar · BottomNav · SideRail · Main
+   ============================================================ */
+
+/* ── TopBar — the tablet's .t-topbar: solid white, one hairline, no glass ── */
+.w-topbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--w-topbar-h);
+  z-index: 40;
+
+  background: #FFFFFF;
+  border-bottom: 1px solid #D9D9D9;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 0 24px 0 20px;
+}
+
+/* WEARIFY wordmark — 24/600, 4px tracking, with the "I" drawn as a maroon
+   stem under a blush dot (the handoff has no glyph for it). */
+.w-wordmark {
+  display: inline-flex;
+  align-items: center;
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 29px;
+  letter-spacing: 4px;
+  color: var(--w-maroon-l);
+  white-space: nowrap;
+}
+.w-wordmark-i {
+  position: relative;
+  display: inline-block;
+  width: 5px;
+  height: 29px;
+  margin: 0 4px 0 1px;
+}
+.w-wordmark-dot {
+  position: absolute;
+  left: -1px;
+  top: -5px;
+  width: 7px;
+  height: 10px;
+  border-radius: 50%;
+  background: #CB857C;
+}
+.w-wordmark-stem {
+  position: absolute;
+  left: 0;
+  top: 6px;
+  width: 5px;
+  height: 17px;
+  background: var(--w-maroon-l);
+}
+
+/* Add Items — 120x40 maroon pill */
+.w-topbar-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 120px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: 10px;
+  background: var(--w-maroon-l);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 17px;
+  text-decoration: none;
+  transition: background 0.18s var(--w-ease);
+}
+.w-topbar-cta:hover { background: var(--w-maroon-d); }
+
+.w-topbar-divider {
+  width: 1px;
+  height: 40px;
+  flex-shrink: 0;
+  background: #727272;
+}
+
+/* Store chip — 165x40, avatar flush to the left edge of the pill */
+.w-storechip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 40px;
+  padding-right: 12px;
+  flex-shrink: 0;
+  border: 1px solid #727272;
+  border-radius: 30px;
+  background: #fff;
+  color: #141B34;
+  text-decoration: none;
+  transition: box-shadow 0.18s var(--w-ease);
+}
+.w-storechip:hover { box-shadow: var(--w-shadow-sm); }
+.w-storechip-avatar {
+  width: 40px;
+  height: 40px;
+  margin: -1px 5px -1px -1px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--w-maroon-l);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  font-weight: 600;
+}
+.w-storechip-text {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+.w-storechip-name {
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 12px;
+  color: #000;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100px;
+}
+.w-storechip-id {
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 12px;
+  color: #727272;
+  white-space: nowrap;
+}
+
+.w-topbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Logo mark — the tablet's .t-brand-mark: flat maroon square, white letter */
+.w-logomark {
+  width: 42px;
+  height: 42px;
+  border-radius: var(--w-r-xs);
+  background: var(--w-maroon);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  cursor: default;
+}
+
+.w-logomark-letter {
+  font-family: var(--w-font), 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 18px;
+  color: #fff;
+  line-height: 1;
+}
+
+.w-topbar-name {
+  font-family: var(--w-font), 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 19px;
+  color: var(--w-ink);
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+
+.w-topbar-date {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--w-ink-muted);
+  margin-top: 2px;
+  letter-spacing: 0.02em;
+}
+
+.w-topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Notification button — the tablet's .t-pill-btn */
+.w-notif-btn {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  border: none;
+  background: var(--w-maroon-l);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s var(--w-ease);
+}
+
+.w-notif-btn:hover {
+  background: var(--w-cream-deep);
+  border-color: var(--w-ink-muted);
+}
+
+.w-notif-dot {
+  position: absolute;
+  top: 9px;
+  right: 9px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--w-maroon);
+  border: 2px solid var(--w-surface);
+}
+
+@keyframes w-notif-pulse {
+
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  50% {
+    transform: scale(1.4);
+    opacity: 0.8;
+  }
+}
+
+/* ── Bottom nav ───────────────────────────────────────────────────── */
+.w-bottomnav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: var(--w-bottomnav-h);
+  z-index: 40;
+
+  background: var(--w-surface);
+  border-top: 1px solid var(--w-cream-border);
+
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 0 8px;
+}
+
+.w-navitem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 6px 10px 2px;
+  text-decoration: none;
+  color: var(--w-ink-ghost);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  position: relative;
+  min-width: 56px;
+  transition: color 0.2s;
+}
+
+.w-navitem.active {
+  color: var(--w-maroon);
+}
+
+.w-navicon-wrap {
+  width: 38px;
+  height: 38px;
+  display: flex;
+  color: inherit;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  transition: all 0.28s var(--w-spring);
+  position: relative;
+}
+
+.w-navitem.active .w-navicon-wrap {
+  background: var(--w-maroon-soft);
+}
+
+.w-navitem:not(.active):hover .w-navicon-wrap {
+  background: var(--w-cream-deep);
+}
+
+/* ── Side rail (tablet) ───────────────────────────────────────────── */
+.w-siderail {
+  display: none;
+  /* hidden mobile, shown tablet+ */
+}
+
+/* ── Main content ─────────────────────────────────────────────────── */
+/* The tablet's peach→cream backdrop (--t-content-grad). .t-content is a
+   fixed-height scroll box; .w-main is a growing document, so the gradient is
+   painted no-repeat one viewport tall over ivory — otherwise a long page
+   stretches the peach the whole way down. */
+.w-main {
+  padding-top: var(--w-topbar-h);
+  padding-bottom: var(--w-bottomnav-h);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: transparent;   /* the shell's gradient shows through */
+}
+
+/* Copyright band — the landing page's frosted ivory strip (.lp-foot), so the
+   store is footed exactly like the front door. */
+.w-foot {
+  flex: none;
+  padding: 13px 16px;
+  background: rgba(253, 250, 245, 0.72);
+  backdrop-filter: blur(18px) saturate(1.1);
+  -webkit-backdrop-filter: blur(18px) saturate(1.1);
+  border-top: 1px solid rgba(201, 148, 26, 0.28);
+  color: #9A8D82;
+  text-align: center;
+  font-size: clamp(10px, 0.9vw, 12px);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.w-main-inner {
+  flex: 1;
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 20px 16px;
+  width: 100%;
+}
+
+/* ── Loading screen ───────────────────────────────────────────────── */
+.w-loadscreen {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--w-cream);
+  background-image: var(--w-noise);
+}
+
+.w-loadscreen-inner {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.w-load-mark {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, var(--w-maroon), var(--w-maroon-l));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--w-shadow-maroon);
+  animation: w-load-breathe 1.8s ease-in-out infinite;
+}
+
+@keyframes w-load-breathe {
+
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+    box-shadow: 0 4px 18px rgba(113, 34, 29, 0.30);
+  }
+
+  50% {
+    opacity: 0.78;
+    transform: scale(0.95);
+    box-shadow: 0 2px 8px rgba(113, 34, 29, 0.15);
+  }
+}
+
+.w-load-text {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--w-ink-muted);
+  letter-spacing: 0.03em;
+}
+
+.w-load-dots {
+  display: inline-flex;
+  gap: 4px;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+
+.w-load-dots span {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--w-gold);
+  display: inline-block;
+  animation: w-dot-hop 1.3s ease-in-out infinite;
+}
+
+.w-load-dots span:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.w-load-dots span:nth-child(3) {
+  animation-delay: 0.30s;
+}
+
+@keyframes w-dot-hop {
+
+  0%,
+  80%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.3;
+  }
+
+  40% {
+    transform: translateY(-6px);
+    opacity: 1;
+  }
+}
+
+/* ── Screen-level header (sticky sub-topbar) ──────────────────────── */
+.w-screen-header {
+  position: sticky;
+  top: var(--w-topbar-h);
+  background: rgba(250, 246, 240, 0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--w-cream-border);
+  z-index: 20;
+  padding: 12px 0;
+}
+
+/* ============================================================
+   TABLET RESPONSIVE  —  768 · 900 · 1024 · 1200
+   ============================================================ */
+
+@media (min-width: 768px) {
+  /* The white bar starts at the sidebar seam, so the maroon runs full height. */
+  .w-topbar {
+    left: var(--w-rail-w);
+    padding: 0 28px;
+  }
+
+  .w-topbar-name {
+    font-size: 21px;
+  }
+
+  .w-logomark {
+    width: 46px;
+    height: 46px;
+    border-radius: 14px;
+  }
+
+  .w-logomark-letter {
+    font-size: 22px;
+  }
+
+  .w-notif-btn {
+    width: 44px;
+    height: 44px;
+  }
+
+  /* Hide bottom nav */
+  .w-bottomnav {
+    display: none;
+  }
+
+  /* The rail carries the store brand from here up — a second mark in the
+     topbar is the same logo twice. The WEARIFY wordmark takes the left slot
+     instead, pinned to the panel's edge (handoff: left 253 = rail + 30). */
+  .w-topbar-brand {
+    display: none;
+  }
+
+  .w-topbar {
+    justify-content: space-between;
+    padding: 0 24px 0 30px;
+  }
+
+  /* ── Side rail — the navbar handoff ──────────────────────────────
+     223px of chrome maroon, the saree illustration laid over it at 10% as a
+     transparent-background PNG (so the art floats on the maroon rather than
+     sitting in a white box), an 80px brand band, the nav, and Sign out pinned
+     30px off the floor. Geometry is the handoff's, taken literally. */
+  .w-siderail {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: var(--w-rail-w);
+    z-index: 45;
+    background: var(--w-maroon-l);
+    overflow: hidden;
+  }
+
+  .w-siderail::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    /* handoff: 731x800 art pinned at x=-253 within the 223 rail */
+    background: url(/store/navbar/pattern.webp) -253px 0 / 731px 100% no-repeat;
+    opacity: 0.1;
+    pointer-events: none;
+  }
+
+  .w-siderail > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Brand band — 80px, hairline under it */
+  .w-rail-head {
+    height: 80px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6.5px;
+    border-bottom: 0.9px solid #E4E4E4;
+    text-decoration: none;
+    overflow: hidden;
+  }
+
+  /* Scoped to the rail head: .w-logomark-letter is also the loading screen's
+     white "W" on a maroon tile, which must not pick these up. */
+  .w-rail-head .w-logomark {
+    width: 27px;
+    height: 25px;
+    flex-shrink: 0;
+    border-radius: 4.37px;
+    background: #FAF7F4;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+
+  .w-rail-head .w-logomark-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .w-rail-head .w-logomark-letter {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--w-maroon-l);
+  }
+
+  .w-rail-head-name {
+    max-width: 120px;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 20px;
+    color: #fff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Nav — first item 110px from the top, i.e. 30px under the brand band */
+  .w-rail-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 30px var(--w-rail-pad) 0;
+  }
+
+  .w-rail-item {
+    display: flex;
+    align-items: center;
+    gap: 10.79px;
+    height: 33px;
+    padding: 0 9px;
+    border-radius: 4px;
+    text-decoration: none;
+    color: #fff;
+    font-size: 12.5924px;
+    font-weight: 500;
+    line-height: 19px;
+    white-space: nowrap;
+    transition: background 0.18s var(--w-ease), color 0.18s var(--w-ease);
+  }
+
+  .w-rail-item:hover {
+    background: rgba(255, 255, 255, 0.12);
+  }
+
+  .w-rail-item.active {
+    background: #FAF7F4;
+    color: var(--w-maroon-l);
+  }
+
+  .w-rail-icon {
+    display: flex;
+    flex-shrink: 0;
+  }
+
+  .w-rail-label {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Sign out — 191x40 cream button, 30px off the bottom */
+  .w-rail-logout {
+    margin: auto 16px 30px;
+    height: 40px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    border: none;
+    border-radius: 8px;
+    background: #FAF7F4;
+    color: var(--w-maroon-l);
+    font-family: var(--w-font), 'Montserrat', system-ui, sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 21px;
+    cursor: pointer;
+    transition: background 0.18s var(--w-ease);
+  }
+
+  .w-rail-logout:hover {
+    background: #fff;
+  }
+
+  /* Main shifts right. No bottom padding here: the copyright bar is the last
+     child, so any padding would strand it above a band of empty canvas. The
+     content's own breathing room lives on .w-main-inner. */
+  .w-main {
+    padding-left: var(--w-rail-w);
+    padding-bottom: 0;
+  }
+
+  .w-main-inner {
+    max-width: none;
+    padding: 20px 24px 32px 30px;
+  }
+
+  /* Toast reposition */
+  .w-toast {
+    bottom: 24px;
+  }
+}
+
+@media (min-width: 900px) {
+
+  .w-main-inner {
+    max-width: none;
+    padding: 20px 24px 32px 30px;
+  }
+}
+
+@media (min-width: 1024px) {
+
+  .w-main-inner {
+    max-width: var(--w-content-max);
+    padding: 20px 24px 32px 30px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .w-main-inner {
+    padding: 20px 24px 32px 30px;
+  }
+}
+
+/* Large desktop / big tablet landscape — let wide screens breathe */
+@media (min-width: 1440px) {
+  .w-main-inner {
+    padding: 20px 24px 32px 30px;
+  }
+}
+
+/* ============================================================
+   DASHBOARD  —  append to store-theme.css
+   ============================================================ */
+
+/* ── Dashboard root ───────────────────────────────────────────────── */
+.store-shell .w-dash {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  animation: w-dash-in 0.45s var(--w-ease) both;
+}
+
+@keyframes w-dash-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Stagger children */
+.store-shell .w-dash>* {
+  animation: w-dash-in 0.45s var(--w-ease) both;
+}
+
+.store-shell .w-dash>*:nth-child(1) {
+  animation-delay: 0.00s;
+}
+
+.store-shell .w-dash>*:nth-child(2) {
+  animation-delay: 0.06s;
+}
+
+.store-shell .w-dash>*:nth-child(3) {
+  animation-delay: 0.10s;
+}
+
+.store-shell .w-dash>*:nth-child(4) {
+  animation-delay: 0.14s;
+}
+
+.store-shell .w-dash>*:nth-child(5) {
+  animation-delay: 0.18s;
+}
+
+.store-shell .w-dash>*:nth-child(6) {
+  animation-delay: 0.22s;
+}
+
+/* ── Greeting ─────────────────────────────────────────────────────── */
+.store-shell .w-greeting {
+  padding: 6px 0 4px;
+}
+
+.store-shell .w-greeting-sub {
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--w-ink-muted);
+  margin-bottom: 8px;
+}
+
+.store-shell .w-greeting-title {
+  font-size: clamp(26px, 2.6vw, 36px);
+  font-weight: 700;
+  font-family: var(--w-font-display), 'Poppins', sans-serif;
+  color: var(--w-ink);
+  line-height: 1.12;
+  letter-spacing: -0.01em;
+}
+
+/* ── Section label ────────────────────────────────────────────────── */
+.store-shell .w-section-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--w-ink-muted);
+  margin-bottom: 10px;
+}
+
+/* ── Card header ──────────────────────────────────────────────────── */
+.store-shell .w-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.store-shell .w-card-title {
+  font-family: var(--w-font), 'Montserrat', sans-serif;
+  font-size: var(--w-fs-md);
+  font-weight: 600;
+  color: var(--w-ink);
+  letter-spacing: -0.01em;
+}
+
+/* ── Health section ───────────────────────────────────────────────── */
+.store-shell .w-section-health {
+  padding: 22px 22px;
+}
+
+.store-shell .w-health-wrap {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  width: 100%;
+}
+
+.store-shell .w-health-ring-col {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.store-shell .w-health-ring-cap {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--w-ink-muted);
+  white-space: nowrap;
+}
+
+.store-shell .w-health-bars-col {
+  flex: 1;
+  min-width: 0;
+}
+
+.store-shell .w-health-bars-title {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--w-ink-muted);
+  margin-bottom: 12px;
+}
+
+.store-shell .w-hbar-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 9px;
+}
+
+.store-shell .w-hbar-row:last-child {
+  margin-bottom: 0;
+}
+
+.store-shell .w-hbar-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--w-ink-soft);
+  width: 64px;
+  flex-shrink: 0;
+}
+
+.store-shell .w-hbar-pct {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--w-ink-muted);
+  width: 30px;
+  text-align: right;
+  font-family: var(--w-font-num), 'Space Grotesk', monospace;
+  flex-shrink: 0;
+}
+
+.store-shell .w-hbar-fill-teal {
+  background: linear-gradient(90deg, var(--w-teal), #2980B9);
+}
+
+.store-shell .w-hbar-fill-gold {
+  background: linear-gradient(90deg, var(--w-gold), var(--w-gold-bright));
+}
+
+.store-shell .w-hbar-fill-navy {
+  background: linear-gradient(90deg, var(--w-navy), var(--w-navy-mid));
+}
+
+/* ── KPI grid ─────────────────────────────────────────────────────── */
+.store-shell .w-kpi-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.store-shell .w-kpi-card {
+  padding: 18px 18px 16px;
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  transition: transform 0.25s var(--w-spring), box-shadow 0.25s;
+  cursor: default;
+}
+
+.store-shell .w-kpi-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--w-shadow-md), var(--w-inset);
+}
+
+/* Text block sits left, icon anchors top-right → the figure fills the card
+   instead of clustering in a corner of a wide tile. */
+.store-shell .w-kpi-body {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 0;
+}
+
+.store-shell .w-kpi-icon-wrap {
+  width: 38px;
+  height: 38px;
+  border-radius: var(--w-r-sm);
+  background: var(--w-gold-mist);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: 1px solid rgba(212, 168, 67, 0.15);
+}
+
+.store-shell .w-kpi-value {
+  font-size: clamp(22px, 2.1vw, 30px);
+  font-weight: 700;
+  color: var(--w-ink);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  font-family: var(--w-font-num), 'Space Grotesk', monospace;
+}
+
+.store-shell .w-kpi-label {
+  font-size: 11.5px;
+  color: var(--w-ink-muted);
+  margin-top: 4px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+
+/* Status pill hugs its text (no full-width stretch) and sits under the label */
+.store-shell .w-kpi-body .w-badge {
+  margin-top: 10px;
+}
+
+/* ── Quick actions ────────────────────────────────────────────────── */
+.store-shell .w-qa-section {
+  /* wrapper, no extra styles needed */
+}
+
+.store-shell .w-qa-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.store-shell .w-qa-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 16px 8px 14px;
+  border: 1px solid var(--w-cream-border);
+  border-radius: var(--w-r-md);
+  background: var(--w-cream-deep);
+  cursor: pointer;
+  transition: all 0.25s var(--w-spring);
+  box-shadow: var(--w-shadow-xs), var(--w-inset);
+}
+
+.store-shell .w-qa-btn:hover {
+  border-color: var(--w-gold);
+  background: #fff;
+  box-shadow: var(--w-shadow-gold), var(--w-inset);
+  transform: translateY(-3px) scale(1.02);
+}
+
+.store-shell .w-qa-btn:active {
+  transform: scale(0.97);
+}
+
+.store-shell .w-qa-label {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--w-ink-mid);
+  text-align: center;
+  line-height: 1.2;
+  letter-spacing: 0.01em;
+}
+
+/* ── Sessions card ────────────────────────────────────────────────── */
+.store-shell .w-sessions-card {
+  padding: 18px 20px;
+}
+
+.store-shell .w-empty-state {
+  font-size: 13.5px;
+  color: var(--w-ink-muted);
+  text-align: center;
+  padding: 24px 0;
+  font-family: var(--w-font), 'Montserrat', sans-serif;
+  font-size: 16px;
+}
+
+.store-shell .w-session-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.store-shell .w-session-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 11px 6px;
+  border-radius: var(--w-r-sm);
+  transition: background 0.15s;
+  margin: 0 -6px;
+}
+
+.store-shell .w-session-row:hover {
+  background: var(--w-gold-mist);
+}
+
+.store-shell .w-session-row--border {
+  border-top: 1px solid var(--w-cream-border);
+}
+
+.store-shell .w-session-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.store-shell .w-session-id {
+  font-size: 11px;
+  color: var(--w-ink-ghost);
+  margin-bottom: 3px;
+  font-family: var(--w-font-num), 'Space Grotesk', monospace;
+}
+
+.store-shell .w-session-staff {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--w-ink);
+}
+
+.store-shell .w-session-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+
+.store-shell .w-session-time {
+  font-size: 10.5px;
+  color: var(--w-ink-ghost);
+}
+
+/* ── Alerts ───────────────────────────────────────────────────────── */
+.store-shell .w-alerts {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.store-shell .w-alert {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: var(--w-r-md);
+  border: 1px solid transparent;
+  border-left-width: 3px;
+  background: var(--w-cream-deep);
+  box-shadow: var(--w-shadow-xs);
+  transition: transform 0.22s var(--w-spring), box-shadow 0.22s;
+}
+
+.store-shell .w-alert:hover {
+  transform: translateX(4px);
+  box-shadow: var(--w-shadow-sm);
+}
+
+.store-shell .w-alert--warn {
+  border-left-color: var(--w-warn);
+  background: var(--w-warn-bg);
+  border-color: rgba(139, 69, 19, 0.15);
+  border-left-color: var(--w-warn);
+}
+
+.store-shell .w-alert--danger {
+  border-left-color: var(--w-danger);
+  background: var(--w-danger-bg);
+  border-color: rgba(139, 0, 0, 0.12);
+  border-left-color: var(--w-danger);
+}
+
+.store-shell .w-alert-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: var(--w-r-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.store-shell .w-alert--warn .w-alert-icon {
+  background: var(--w-warn-bg);
+  color: var(--w-warn);
+}
+
+.store-shell .w-alert--danger .w-alert-icon {
+  background: var(--w-danger-bg);
+  color: var(--w-danger);
+}
+
+.store-shell .w-alert-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--w-ink);
+  margin-bottom: 3px;
+}
+
+.store-shell .w-alert-body {
+  font-size: 12px;
+  color: var(--w-ink-soft);
+  line-height: 1.45;
+}
+
+/* ============================================================
+   TABLET OVERRIDES — Dashboard
+   ============================================================ */
+
+@media (min-width: 768px) {
+  .store-shell .w-dash {
+    gap: 26px;
+  }
+
+  .store-shell .w-greeting-title {
+    font-size: clamp(28px, 2.8vw, 40px);
+  }
+
+  .store-shell .w-greeting-sub {
+    font-size: 12.5px;
+  }
+
+  .store-shell .w-section-health {
+    padding: 26px 28px;
+  }
+
+  .store-shell .w-health-wrap {
+    gap: 32px;
+  }
+
+  .store-shell .w-kpi-value {
+    font-size: 27px;
+  }
+
+  .store-shell .w-kpi-card {
+    padding: 18px 18px 16px;
+  }
+
+  .store-shell .w-qa-btn {
+    padding: 20px 10px 18px;
+  }
+
+  .store-shell .w-qa-label {
+    font-size: 12.5px;
+  }
+
+  .store-shell .w-sessions-card {
+    padding: 22px 24px;
+  }
+}
+
+/* 900px: 4-col KPI, 6-col quick actions */
+@media (min-width: 900px) {
+  .store-shell .w-kpi-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .store-shell .w-qa-grid {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+
+/* 1024px: more breathing room */
+@media (min-width: 1024px) {
+  .store-shell .w-greeting-title {
+    font-size: 48px;
+  }
+
+  .store-shell .w-kpi-value {
+    font-size: 30px;
+  }
+
+  .store-shell .w-kpi-label {
+    font-size: 12.5px;
+  }
+
+  .store-shell .w-session-staff {
+    font-size: 14.5px;
+  }
+
+  .store-shell .w-session-id {
+    font-size: 12px;
+  }
+
+  .store-shell .w-hbar-label {
+    width: 72px;
+  }
+}
+
+/* 1200px: 2-col dashboard layout.
+   Full-width rows (health / KPIs / quick actions) stay self-contained so a short
+   card can never leave a void beside a tall one. Only the bottom row splits into
+   two columns (sessions + alerts); when alerts are absent, sessions is the last
+   child and spans the full width. */
+@media (min-width: 1200px) {
+  .store-shell .w-dash {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+    align-items: start;
+  }
+
+  .store-shell .w-greeting,
+  .store-shell .w-section-health,
+  .store-shell .w-qa-section {
+    grid-column: 1 / -1;
+  }
+
+  .store-shell .w-kpi-grid {
+    grid-column: 1 / -1;
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .store-shell .w-sessions-card {
+    grid-column: 1;
+  }
+
+  .store-shell .w-alerts {
+    grid-column: 2;
+    align-self: start;
+  }
+
+  /* No alerts rendered → sessions is the last child → fill the row */
+  .store-shell .w-sessions-card:last-child {
+    grid-column: 1 / -1;
+  }
+}
+
+/* ============================================================
+   SAREE DETAIL + ADD SAREE  —  append to store-theme.css
+   ============================================================ */
+
+/* ── Shared back button ───────────────────────────────────────────── */
+.store-shell .w-back-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1.5px solid var(--w-cream-border);
+  background: rgba(255, 255, 255, 0.70);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--w-ink-mid);
+  flex-shrink: 0;
+  transition: all 0.22s var(--w-spring);
+  box-shadow: var(--w-shadow-xs), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+.store-shell .w-back-btn:hover {
+  border-color: var(--w-gold);
+  background: #fff;
+  box-shadow: var(--w-shadow-gold);
+  transform: scale(1.06) translateX(-2px);
+}
+
+/* ── Detail page root ─────────────────────────────────────────────── */
+.store-shell .w-detail-root {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  animation: w-dash-in 0.4s var(--w-ease) both;
+}
+
+.store-shell .w-detail-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.store-shell .w-detail-heading {
+  flex: 1;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--w-ink);
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  letter-spacing: -0.01em;
+}
+
+/* ── Approval banners ─────────────────────────────────────────────── */
+.store-shell .w-approval-banner {
+  padding: 14px 16px;
+  border-radius: var(--w-r-md);
+  border: 1.5px solid transparent;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.store-shell .w-approval-banner--pending {
+  background: var(--w-navy-soft);
+  border-color: rgba(104, 38, 42, 0.14);
+}
+
+.store-shell .w-approval-banner--corrections {
+  background: rgba(212, 168, 67, 0.06);
+  border-color: rgba(212, 168, 67, 0.22);
+  flex-direction: column;
+  gap: 10px;
+}
+
+.store-shell .w-approval-banner-top {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.store-shell .w-approval-icon {
+  font-size: 18px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.store-shell .w-approval-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--w-navy);
+}
+
+.store-shell .w-approval-body {
+  font-size: 12px;
+  color: var(--w-ink-muted);
+  margin-top: 3px;
+  line-height: 1.45;
+}
+
+.store-shell .w-correction-note-box {
+  padding: 10px 13px;
+  border-radius: var(--w-r-sm);
+  background: rgba(212, 168, 67, 0.06);
+  border: 1px solid rgba(212, 168, 67, 0.16);
+  font-size: 13px;
+  color: var(--w-ink-mid);
+  line-height: 1.5;
+}
+
+.store-shell .w-correction-note-label {
+  font-weight: 700;
+  color: var(--w-gold);
+  font-size: 10.5px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 4px;
+}
+
+/* ── Hero image ───────────────────────────────────────────────────── */
+/* Portrait ratio (saree photography is vertical) — a fixed height crops the
+   model and strands a void under the short media column. */
+.store-shell .w-detail-hero {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  max-height: calc(100vh - 220px);
+  border-radius: var(--w-r-lg);
+  overflow: hidden;
+  position: relative;
+  box-shadow: var(--w-shadow-md);
+}
+
+.store-shell .w-detail-hero-tag {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  padding: 5px 13px;
+  border-radius: var(--w-r-pill);
+  background: rgba(104, 38, 42, 0.52);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  backdrop-filter: blur(8px);
+}
+
+.store-shell .w-detail-hero-lowstock {
+  position: absolute;
+  bottom: 14px;
+  right: 14px;
+  padding: 5px 13px;
+  border-radius: var(--w-r-pill);
+  background: var(--w-danger);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  box-shadow: 0 2px 10px rgba(139, 0, 0, 0.30);
+}
+
+/* ── Photo tabs ───────────────────────────────────────────────────── */
+.store-shell .w-photo-tabs {
+  display: flex;
+  gap: 7px;
+  overflow-x: auto;
+  padding-bottom: 2px;
+  scrollbar-width: none;
+}
+
+.store-shell .w-photo-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.store-shell .w-photo-tab {
+  padding: 7px 15px;
+  border-radius: var(--w-r-pill);
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  border: 1.5px solid var(--w-cream-border);
+  background: var(--w-cream-deep);
+  color: var(--w-ink-muted);
+  transition: all 0.2s var(--w-spring);
+  box-shadow: var(--w-shadow-xs);
+}
+
+.store-shell .w-photo-tab:hover {
+  border-color: var(--w-gold);
+  color: var(--w-ink-soft);
+}
+
+.store-shell .w-photo-tab.active {
+  background: var(--w-navy);
+  color: #fff;
+  border-color: var(--w-navy);
+  box-shadow: 0 3px 12px rgba(104, 38, 42, 0.22);
+}
+
+/* ── Core info card ───────────────────────────────────────────────── */
+.store-shell .w-detail-info-card {
+  padding: 20px 20px 18px;
+}
+
+.store-shell .w-detail-name {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--w-ink);
+  margin-bottom: 6px;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.store-shell .w-detail-meta {
+  font-size: 12.5px;
+  color: var(--w-ink-muted);
+  margin-bottom: 14px;
+  letter-spacing: 0.01em;
+}
+
+.store-shell .w-detail-price-row {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.store-shell .w-detail-price {
+  font-family: var(--w-font-num), 'Space Grotesk', monospace;
+  font-size: 26px;
+  font-weight: 500;
+  color: var(--w-success);
+  letter-spacing: -0.03em;
+}
+
+.store-shell .w-detail-mrp {
+  font-size: 14px;
+  color: var(--w-ink-ghost);
+  text-decoration: line-through;
+}
+
+.store-shell .w-detail-price-edit {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.store-shell .w-detail-price-prefix {
+  font-size: 15px;
+  color: var(--w-ink-muted);
+}
+
+.store-shell .w-detail-description {
+  font-size: 14px;
+  color: var(--w-ink-mid);
+  line-height: 1.65;
+  margin-bottom: 14px;
+}
+
+.store-shell .w-attr-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-bottom: 14px;
+}
+
+.store-shell .w-attr-chip {
+  padding: 5px 14px;
+  border-radius: var(--w-r-pill);
+  border: 1.5px solid var(--w-cream-border);
+  background: var(--w-cream-deep);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--w-ink-soft);
+  box-shadow: var(--w-shadow-xs);
+}
+
+.store-shell .w-detail-badges {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--w-cream-border);
+}
+
+/* ── Edit card ────────────────────────────────────────────────────── */
+.store-shell .w-detail-edit-card {
+  padding: 20px;
+}
+
+/* ── Performance card ─────────────────────────────────────────────── */
+.store-shell .w-detail-perf-card {
+  padding: 20px;
+}
+
+.store-shell .w-perf-stats {
+  display: grid;
+  /* Fixed 2×2 — auto-fit collapsed to one tall column inside a narrow
+     grid column, stretching the page with stacked full-width tiles. */
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+@media (min-width: 1200px) {
+  .store-shell .w-perf-stats {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.store-shell .w-perf-statbox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 12px 8px;
+  background: var(--w-cream-deep);
+  border: 1px solid var(--w-cream-border);
+  border-radius: var(--w-r-sm);
+  box-shadow: var(--w-shadow-xs), var(--w-inset);
+}
+
+.store-shell .w-perf-statbox-icon {
+  font-size: 16px;
+  line-height: 1;
+}
+
+.store-shell .w-perf-statbox-val {
+  font-family: var(--w-font-num), 'Space Grotesk', monospace;
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--w-navy);
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.store-shell .w-perf-statbox-label {
+  font-size: 10px;
+  color: var(--w-ink-ghost);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.store-shell .w-perf-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.store-shell .w-perf-bar-row {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.store-shell .w-perf-bar-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--w-ink-mid);
+  font-weight: 500;
+}
+
+.store-shell .w-perf-days {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--w-ink-muted);
+  padding-top: 12px;
+  border-top: 1px solid var(--w-cream-border);
+}
+
+/* ── AI Tags card ─────────────────────────────────────────────────── */
+.store-shell .w-detail-aitags-card {
+  padding: 18px 20px;
+}
+
+.store-shell .w-aitags-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.store-shell .w-aitag {
+  padding: 5px 13px;
+  border-radius: var(--w-r-pill);
+  background: var(--w-teal-soft);
+  color: var(--w-teal);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.store-shell .w-aitag-removable {
+  transition: all 0.18s;
+}
+
+.store-shell .w-aitag-removable:hover {
+  background: rgba(26, 82, 118, 0.18);
+}
+
+.store-shell .w-aitag-remove {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--w-teal);
+  padding: 0;
+  display: flex;
+  align-items: center;
+  opacity: 0.65;
+  transition: opacity 0.15s;
+}
+
+.store-shell .w-aitag-remove:hover {
+  opacity: 1;
+}
+
+.store-shell .w-aitag-add-btn {
+  padding: 5px 13px;
+  border-radius: var(--w-r-pill);
+  border: 1.5px dashed var(--w-teal);
+  background: none;
+  color: var(--w-teal);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s;
+}
+
+.store-shell .w-aitag-add-btn:hover {
+  background: var(--w-teal-soft);
+}
+
+/* ── Stock card ───────────────────────────────────────────────────── */
+.store-shell .w-detail-stock-card {
+  padding: 18px 20px;
+}
+
+.store-shell .w-stock-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+/* Danger outline button */
+.store-shell .w-btn-danger-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  font-family: var(--w-font), 'Montserrat', system-ui, sans-serif;
+  font-weight: 600;
+  font-size: 13.5px;
+  border-radius: var(--w-r-pill);
+  padding: 11px 20px;
+  cursor: pointer;
+  transition: all 0.22s var(--w-spring);
+  background: transparent;
+  color: var(--w-danger);
+  border: 1.5px solid rgba(139, 0, 0, 0.25);
+}
+
+.store-shell .w-btn-danger-outline:hover {
+  background: var(--w-danger-bg);
+  border-color: var(--w-danger);
+}
+
+.store-shell .w-btn-danger-outline:active {
+  transform: scale(0.97);
+}
+
+/* ── Delete modal ─────────────────────────────────────────────────── */
+.store-shell .w-delete-modal {
+  max-width: 360px;
+  text-align: center;
+}
+
+.store-shell .w-delete-icon-wrap {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--w-danger-bg);
+  border: 1px solid rgba(139, 0, 0, 0.14);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 14px;
+}
+
+.store-shell .w-delete-title {
+  font-family: var(--w-font), 'Montserrat', sans-serif;
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--w-navy);
+  margin-bottom: 8px;
+}
+
+.store-shell .w-delete-body {
+  font-size: 13.5px;
+  color: var(--w-ink-mid);
+  line-height: 1.55;
+}
+
+.store-shell .w-btn-danger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  font-family: var(--w-font), 'Montserrat', system-ui, sans-serif;
+  font-weight: 600;
+  font-size: 13.5px;
+  border-radius: var(--w-r-pill);
+  padding: 11px 20px;
+  cursor: pointer;
+  transition: all 0.22s var(--w-spring);
+  background: var(--w-danger);
+  color: #fff;
+  border: none;
+  box-shadow: 0 3px 12px rgba(139, 0, 0, 0.25);
+}
+
+.store-shell .w-btn-danger:hover {
+  box-shadow: 0 5px 18px rgba(139, 0, 0, 0.32);
+  transform: translateY(-1px);
+}
+
+.store-shell .w-btn-danger:active {
+  transform: scale(0.97);
+}
+
+/* ============================================================
+   ADD SAREE PAGE
+   ============================================================ */
+
+.store-shell .w-add-root {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  animation: w-dash-in 0.4s var(--w-ease) both;
+}
+
+/* ── Photo section ────────────────────────────────────────────────── */
+.store-shell .w-add-photos-card {
+  padding: 18px 18px 16px;
+}
+
+.store-shell .w-add-photos-hint {
+  font-size: 12px;
+  color: var(--w-ink-muted);
+  margin-bottom: 12px;
+  margin-top: -4px;
+}
+
+.store-shell .w-photo-slots {
+  display: flex;
+  gap: 8px;
+}
+
+.store-shell .w-photo-slot {
+  flex: 1;
+  height: 92px;
+  border-radius: 14px;
+  border: 2px dashed var(--w-cream-border);
+  background: var(--w-cream-deep);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  cursor: pointer;
+  padding: 0;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.22s var(--w-spring);
+}
+
+.store-shell .w-photo-slot:hover {
+  border-color: var(--w-gold);
+  background: rgba(255, 255, 255, 0.8);
+  transform: scale(1.02);
+}
+
+.store-shell .w-photo-slot.filled {
+  border-color: var(--w-success);
+  border-style: solid;
+  background: var(--w-success-bg);
+}
+
+.store-shell .w-photo-slot-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+.store-shell .w-photo-slot-check {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--w-success);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(30, 92, 47, 0.30);
+}
+
+.store-shell .w-photo-slot-label {
+  position: absolute;
+  bottom: 3px;
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--w-teal);
+  background: rgba(255, 255, 255, 0.88);
+  padding: 1px 7px;
+  border-radius: 5px;
+  letter-spacing: 0.04em;
+}
+
+.store-shell .w-photo-slot-plus {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--w-ink-ghost);
+}
+
+.store-shell .w-photo-slot-name {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--w-ink-ghost);
+}
+
+.store-shell .w-add-photos-req {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--w-danger);
+  margin-top: 10px;
+}
+
+/* ── AI tag panel ─────────────────────────────────────────────────── */
+.store-shell .w-aitag-panel {
+  background: var(--w-cream-deep);
+  border: 2px solid var(--w-gold);
+  border-radius: var(--w-r-md);
+  padding: 18px 18px 16px;
+  box-shadow: 0 4px 20px var(--w-gold-mist);
+}
+
+.store-shell .w-aitag-loading {}
+
+.store-shell .w-aitag-skeleton-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.store-shell .w-aitag-skeleton {
+  padding: 5px 14px;
+  border-radius: var(--w-r-pill);
+  background: var(--w-cream-border);
+  color: var(--w-ink-muted);
+  font-size: 12px;
+  animation: w-load-breathe 1.8s ease-in-out infinite;
+}
+
+.store-shell .w-aitag-progress-fill {
+  animation: w-progress-march 2s ease-in-out infinite;
+}
+
+@keyframes w-progress-march {
+
+  0%,
+  100% {
+    width: 45%;
+  }
+
+  50% {
+    width: 80%;
+  }
+}
+
+.store-shell .w-aitag-model-note {
+  font-size: 10.5px;
+  color: var(--w-ink-ghost);
+  margin-top: 8px;
+}
+
+.store-shell .w-aitag-hint {
+  font-size: 11px;
+  color: var(--w-ink-ghost);
+  margin-top: 10px;
+  line-height: 1.5;
+}
+
+/* ── Form cards ───────────────────────────────────────────────────── */
+.store-shell .w-add-form-card {
+  padding: 20px;
+}
+
+/* Price input composite */
+.store-shell .w-price-input-wrap {
+  display: flex;
+  align-items: center;
+  border: 1.5px solid var(--w-cream-border);
+  border-radius: var(--w-r-sm);
+  background: #fff;
+  overflow: hidden;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  box-shadow: var(--w-shadow-xs);
+}
+
+.store-shell .w-price-input-wrap:focus-within {
+  border-color: var(--w-gold);
+  box-shadow: 0 0 0 3px var(--w-gold-mist), var(--w-shadow-xs);
+}
+
+.store-shell .w-price-prefix {
+  padding: 11px 13px;
+  font-size: 14px;
+  color: var(--w-ink-muted);
+  background: var(--w-cream-deep);
+  border-right: 1.5px solid var(--w-cream-border);
+  flex-shrink: 0;
+}
+
+.store-shell .w-price-input {
+  flex: 1;
+  padding: 11px 13px;
+  font-size: 14px;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--w-ink);
+  font-family: var(--w-font-num), 'Space Grotesk', monospace;
+}
+
+/* ── Collapsible additional ───────────────────────────────────────── */
+.store-shell .w-add-additional-card {
+  padding: 0;
+  overflow: hidden;
+}
+
+.store-shell .w-collapsible-trigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 15px 18px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.15s;
+}
+
+.store-shell .w-collapsible-trigger:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.store-shell .w-collapsible-title {
+  font-size: 14.5px;
+  font-weight: 700;
+  color: var(--w-ink-mid);
+  flex: 1;
+}
+
+.store-shell .w-collapsible-opt {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--w-ink-ghost);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.store-shell .w-collapsible-chevron {
+  color: var(--w-ink-ghost);
+  transition: transform 0.25s var(--w-ease);
+  flex-shrink: 0;
+}
+
+.store-shell .w-collapsible-chevron.open {
+  transform: rotate(180deg);
+}
+
+.store-shell .w-collapsible-body {
+  padding: 0 18px 18px;
+  border-top: 1px solid var(--w-cream-border);
+  animation: w-dash-in 0.25s var(--w-ease) both;
+}
+
+/* ── Save row ─────────────────────────────────────────────────────── */
+.store-shell .w-add-save-row {
+  display: flex;
+  gap: 10px;
+}
+
+/* ── Tablet overrides ─────────────────────────────────────────────── */
+@media (min-width: 768px) {
+  .store-shell .w-detail-name {
+    font-size: 24px;
+  }
+
+  .store-shell .w-detail-price {
+    font-size: 30px;
+  }
+
+  .store-shell .w-perf-stats {
+    gap: 12px;
+  }
+
+  .store-shell .w-perf-statbox {
+    padding: 14px 8px;
+  }
+
+  .store-shell .w-perf-statbox-val {
+    font-size: 22px;
+  }
+
+  .store-shell .w-photo-slots {
+    gap: 10px;
+  }
+
+  .store-shell .w-photo-slot {
+    height: 108px;
+  }
+
+  .store-shell .w-add-form-card {
+    padding: 24px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .store-shell .w-detail-name {
+    font-size: 28px;
+  }
+
+  .store-shell .w-detail-price {
+    font-size: 34px;
+  }
+
+  .store-shell .w-perf-statbox-val {
+    font-size: 24px;
+  }
+}
+
+/* ============================================================
+   SHARED COMPONENT LAYER v2  (Heritage admin)
+   Collision-free, global single-class atoms used by the redesigned
+   pages. Eyebrows · section heads · chips · tabs · stat strips ·
+   list rows · data tables · toggles · dialogs · empty states.
+   ============================================================ */
+
+/* ── Eyebrow (uppercase wide-tracked label) ───────────────────────── */
+.w-eyebrow {
+  font-family: var(--w-font), 'Montserrat', system-ui, sans-serif;
+  font-size: var(--w-fs-2xs);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--w-ink-muted);
+}
+
+/* ── Section header (title left, action right) ────────────────────── */
+.w-section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--w-sp-3);
+  margin-bottom: var(--w-sp-4);
+}
+
+.w-section-title {
+  font-family: var(--w-font), 'Montserrat', sans-serif;
+  font-weight: 600;
+  font-size: var(--w-fs-xl);
+  line-height: 1.1;
+  color: var(--w-ink);
+  letter-spacing: -0.01em;
+}
+
+/* Page-level titles use this class as an <h1>; sub-section headers use it on
+   <h2>/<span>. Match every page's <h1> to .w-page-title (30px) so titles read
+   consistently across the module; sub-section headers stay at 24px. */
+h1.w-section-title {
+  font-size: var(--w-fs-xl);
+}
+
+.w-section-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--w-fs-sm);
+  font-weight: 600;
+  color: var(--w-maroon);
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.w-section-action:hover { color: var(--w-maroon-l); }
+
+/* ── Chip row (horizontal-scroll filter pills) ────────────────────── */
+.w-chip-row {
+  display: flex;
+  gap: var(--w-sp-2);
+  overflow-x: auto;
+  padding-bottom: 2px;
+  scrollbar-width: none;
+}
+.w-chip-row::-webkit-scrollbar { display: none; }
+
+.w-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 15px;
+  border-radius: var(--w-r-pill);
+  font-size: var(--w-fs-sm);
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  border: 1px solid var(--w-cream-border);
+  background: var(--w-surface);
+  color: var(--w-ink-soft);
+  transition: background 0.16s var(--w-ease), color 0.16s var(--w-ease), border-color 0.16s var(--w-ease);
+}
+
+.w-chip:hover { border-color: var(--w-maroon); color: var(--w-maroon); }
+
+.w-chip.active {
+  background: var(--w-maroon);
+  border-color: var(--w-maroon);
+  color: #fff;
+}
+
+/* ── Tabs (pill segmented control) ────────────────────────────────── */
+.w-tabs {
+  display: inline-flex;
+  gap: 4px;
+  padding: 4px;
+  border-radius: var(--w-r-pill);
+  background: var(--w-surface-soft);
+  border: 1px solid var(--w-cream-border);
+}
+
+.w-tab {
+  appearance: none;
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 7px 16px;
+  border-radius: var(--w-r-pill);
+  font-size: var(--w-fs-sm);
+  font-weight: 600;
+  color: var(--w-ink-soft);
+  transition: background 0.16s var(--w-ease), color 0.16s var(--w-ease);
+}
+
+.w-tab.active {
+  background: var(--w-maroon);
+  color: #fff;
+}
+
+/* ── Stat strip (DM Mono figures — the ledger) ────────────────────── */
+.w-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: var(--w-sp-3);
+}
+
+.w-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: var(--w-sp-4);
+  background: var(--w-surface);
+  border: 1px solid var(--w-border-l);
+  border-radius: var(--w-r-md);
+  box-shadow: var(--w-shadow-xs);
+}
+
+.w-stat-value {
+  font-family: var(--w-font-num), 'Space Grotesk', monospace;
+  /* Long currency figures (₹7,49,450.20) overflowed at 24px in a ~168px cell.
+     clamp keeps figures prominent on desktop (24px) but eases to ~17px on
+     large-tablet so lakh-scale totals fit a 4-up strip; ellipsis is the
+     last-resort safety net at the smallest tablet widths. */
+  font-size: clamp(var(--w-fs-md), 1.7vw, var(--w-fs-xl));
+  font-weight: 500;
+  color: var(--w-ink);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.15;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.w-stat-label {
+  font-size: var(--w-fs-xs);
+  font-weight: 600;
+  color: var(--w-ink-muted);
+  letter-spacing: 0.02em;
+}
+
+/* ── List row (settings / records) ────────────────────────────────── */
+.w-row {
+  display: flex;
+  align-items: center;
+  gap: var(--w-sp-3);
+  width: 100%;
+  padding: 14px var(--w-sp-4);
+  background: var(--w-surface);
+  border: 1px solid var(--w-border-l);
+  border-radius: var(--w-r-md);
+  text-align: left;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  transition: border-color 0.16s var(--w-ease), box-shadow 0.16s var(--w-ease), transform 0.16s var(--w-ease);
+}
+
+.w-row:hover {
+  border-color: var(--w-cream-border);
+  box-shadow: var(--w-shadow-sm);
+}
+
+.w-row-icon {
+  width: 38px;
+  height: 38px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--w-r-sm);
+  background: var(--w-maroon-soft);
+  color: var(--w-maroon);
+}
+
+.w-row-main { flex: 1; min-width: 0; }
+
+.w-row-title {
+  /* Title/sub are spans — without block they run together inline. */
+  display: block;
+  font-size: var(--w-fs-base);
+  font-weight: 600;
+  color: var(--w-ink);
+  line-height: 1.35;
+}
+
+.w-row-sub {
+  display: block;
+  font-size: var(--w-fs-sm);
+  color: var(--w-ink-muted);
+  margin-top: 2px;
+  line-height: 1.4;
+}
+
+.w-row-chevron {
+  flex-shrink: 0;
+  color: var(--w-ink-ghost);
+  display: flex;
+}
+
+/* ── Data table (desktop) ─────────────────────────────────────────── */
+.w-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  background: var(--w-surface);
+  border: 1px solid var(--w-border-l);
+  border-radius: var(--w-r-md);
+  box-shadow: var(--w-shadow-xs);
+}
+
+/* Scroll modifier — show four rows, scroll the rest under a pinned header.
+   ponytail: the cap is a height, not a row count, so a row that wraps to two
+   lines shows as ~3.5 rows. Set --w-table-rows to change how many. */
+.w-table-wrap--scroll {
+  --w-table-rows: 4;
+  --w-table-row-h: 104px;   /* a row here wraps to 3 lines (the date column) */
+  --w-table-head-h: 46px;
+  max-height: calc(var(--w-table-head-h) + var(--w-table-rows) * var(--w-table-row-h));
+  overflow-y: auto;
+}
+
+.w-table-wrap--scroll thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.w-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--w-fs-sm);
+}
+
+.w-table thead th {
+  text-align: left;
+  padding: 13px var(--w-sp-4);
+  font-size: var(--w-fs-2xs);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--w-ink-muted);
+  background: var(--w-surface-soft);
+  border-bottom: 1px solid var(--w-cream-border);
+  white-space: nowrap;
+}
+
+.w-table tbody td {
+  padding: 14px var(--w-sp-4);
+  border-bottom: 1px solid var(--w-border-l);
+  color: var(--w-ink-mid);
+  vertical-align: middle;
+}
+
+.w-table tbody tr:last-child td { border-bottom: none; }
+
+.w-table tbody tr {
+  transition: background 0.14s var(--w-ease);
+}
+
+.w-table tbody tr:hover { background: var(--w-surface-soft); }
+
+.w-table .w-mono { font-variant-numeric: tabular-nums; }
+
+/* Right-align numeric columns so figures form a clean ledger edge. Apply .w-num
+   to both the <th> and its <td>s. */
+.w-table th.w-num,
+.w-table td.w-num { text-align: right; }
+
+/* ── Toggle ───────────────────────────────────────────────────────── */
+.w-toggle {
+  appearance: none;
+  width: 44px;
+  height: 26px;
+  flex-shrink: 0;
+  border-radius: var(--w-r-pill);
+  background: var(--w-cream-border);
+  position: relative;
+  cursor: pointer;
+  transition: background 0.2s var(--w-ease);
+}
+
+.w-toggle::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: var(--w-shadow-xs);
+  transition: transform 0.2s var(--w-ease);
+}
+
+.w-toggle:checked { background: var(--w-maroon); }
+.w-toggle:checked::after { transform: translateX(18px); }
+
+/* ── Dialog (centered modal) ──────────────────────────────────────── */
+.w-dialog-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--w-sp-4);
+  background: rgba(0, 0, 0, 0.40);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  animation: w-fade-in 0.2s var(--w-ease) forwards;
+}
+
+.w-dialog {
+  width: 100%;
+  max-width: 460px;
+  background: var(--w-surface);
+  border: 1px solid var(--w-border-l);
+  border-radius: var(--w-r-xl);
+  box-shadow: var(--w-shadow-lg);
+  padding: var(--w-sp-5);
+  animation: w-pop-in 0.24s var(--w-spring) forwards;
+}
+
+.w-dialog-title {
+  font-family: var(--w-font), 'Montserrat', sans-serif;
+  font-weight: 600;
+  font-size: var(--w-fs-lg);
+  color: var(--w-ink);
+  line-height: 1.1;
+}
+
+.w-dialog-body {
+  font-size: var(--w-fs-base);
+  color: var(--w-ink-soft);
+  line-height: 1.55;
+  margin-top: var(--w-sp-2);
+}
+
+.w-dialog-actions {
+  display: flex;
+  gap: var(--w-sp-3);
+  margin-top: var(--w-sp-5);
+}
+
+@keyframes w-fade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes w-pop-in {
+  from { opacity: 0; transform: translateY(10px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* ── Empty state ──────────────────────────────────────────────────── */
+.w-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--w-sp-3);
+  padding: var(--w-sp-7) var(--w-sp-4);
+}
+
+.w-empty-icon {
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--w-maroon-soft);
+  color: var(--w-maroon);
+}
+
+.w-empty-title {
+  font-family: var(--w-font), 'Montserrat', sans-serif;
+  font-weight: 600;
+  font-size: var(--w-fs-xl);
+  color: var(--w-ink);
+}
+
+.w-empty-text {
+  font-size: var(--w-fs-sm);
+  color: var(--w-ink-muted);
+  max-width: 320px;
+  line-height: 1.5;
+}
+
+/* ── Skeleton ─────────────────────────────────────────────────────── */
+.w-skeleton {
+  background: linear-gradient(90deg, var(--w-cream-deep) 25%, var(--w-cream-hover) 37%, var(--w-cream-deep) 63%);
+  background-size: 400% 100%;
+  border-radius: var(--w-r-sm);
+  animation: w-shimmer 1.4s ease-in-out infinite;
+}
+
+@keyframes w-shimmer {
+  from { background-position: 100% 0; }
+  to { background-position: 0 0; }
+}
+
+/* ── Entrance utility + stagger ───────────────────────────────────── */
+.w-rise { animation: w-rise-in 0.4s var(--w-ease) both; }
+@keyframes w-rise-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.w-d1 { animation-delay: 0.04s; }
+.w-d2 { animation-delay: 0.09s; }
+.w-d3 { animation-delay: 0.14s; }
+.w-d4 { animation-delay: 0.19s; }
+.w-d5 { animation-delay: 0.24s; }
+.w-d6 { animation-delay: 0.30s; }
+
+/* ── Page grid helpers (desktop multi-column) ─────────────────────── */
+.w-grid {
+  display: grid;
+  gap: var(--w-sp-4);
+}
+/* align-items:start so a single card in one column isn't stretched to match a
+   taller stack in the other (dead space at its bottom) — used by the detail /
+   settings two-up layouts. */
+/* minmax(0,1fr): a bare 1fr track has an `auto` minimum, so a wide input
+   pushes past the card edge on tablet (clipped "Stock Qty" bug). */
+.w-grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; }
+/* Fluid: column count follows the real content width (left of the rail), so
+   these never render too many cramped columns on large tablet. auto-fit (not
+   auto-fill) collapses empty tracks so a short list stretches to fill. */
+.w-grid-3 { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
+.w-grid-4 { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+.w-grid-auto { grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); }
+
+@media (max-width: 640px) {
+  .w-grid-2 { grid-template-columns: 1fr; }
+}
+
+/* ── Shell additions (navy-rail logout, topbar CTA) ───────────────── */
+.w-topbar-cta { min-height: 38px; }
+
+@media (max-width: 600px) {
+  .w-topbar-cta span,
+  .w-topbar-cta { font-size: var(--w-fs-2xs); }
+}
+
+/* ── Page header (eyebrow + serif title) ──────────────────────────── */
+.w-page-eyebrow {
+  font-size: var(--w-fs-2xs);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--w-ink-muted);
+  margin-bottom: 4px;
+}
+
+.w-page-title {
+  font-family: var(--w-font), 'Montserrat', sans-serif;
+  font-weight: 600;
+  font-size: var(--w-fs-xl);
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  color: var(--w-ink);
+}
+
+.w-page-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 50vh;
+  color: var(--w-ink-muted);
+  font-size: var(--w-fs-sm);
+}
+
+/* ── Form field / label / textarea ────────────────────────────────── */
+.w-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: var(--w-sp-4);
+}
+
+/* Inside a grid the gap already spaces fields — the extra margin doubled
+   the rhythm to 32px and made every form read half-empty. */
+.w-grid > .w-field,
+.w-grid .w-grid > .w-field {
+  margin-bottom: 0;
+}
+
+/* Sticky media/side column for two-up detail layouts — active whenever
+   w-grid-2 actually renders two columns (>640px). */
+@media (min-width: 641px) {
+  .store-shell .w-sticky-col {
+    position: sticky;
+    top: calc(var(--w-topbar-h) + 20px);
+    align-self: start;
+  }
+}
+
+.w-label {
+  font-size: var(--w-fs-sm);
+  font-weight: 600;
+  color: var(--w-ink-soft);
+  letter-spacing: 0.01em;
+}
+
+.w-label-req { color: var(--w-maroon); }
+.w-label-opt {
+  color: var(--w-ink-ghost);
+  font-weight: 400;
+}
+
+.w-textarea {
+  min-height: 78px;
+  resize: vertical;
+  line-height: 1.5;
+}
+
+/* ── Spinner (in-button loading) ──────────────────────────────────── */
+.w-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: w-spin 0.7s linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes w-spin { to { transform: rotate(360deg); } }
+
+/* ── Modal (legacy .w-modal set, aligned to .w-dialog look) ───────── */
+.w-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--w-sp-4);
+  background: rgba(0, 0, 0, 0.40);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  animation: w-fade-in 0.2s var(--w-ease) forwards;
+}
+
+.w-modal {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: var(--w-surface);
+  border: 1px solid var(--w-border-l);
+  border-radius: var(--w-r-xl);
+  box-shadow: var(--w-shadow-lg);
+  padding: var(--w-sp-5);
+  animation: w-pop-in 0.24s var(--w-spring) forwards;
+}
+
+.w-modal-title {
+  font-family: var(--w-font), 'Montserrat', sans-serif;
+  font-weight: 600;
+  font-size: var(--w-fs-lg);
+  color: var(--w-ink);
+  line-height: 1.1;
+}
+
+.w-modal-close {
+  position: absolute;
+  top: var(--w-sp-4);
+  right: var(--w-sp-4);
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: none;
+  background: var(--w-surface-soft);
+  color: var(--w-ink-soft);
+  cursor: pointer;
+  transition: background 0.16s var(--w-ease), color 0.16s var(--w-ease);
+}
+
+.w-modal-close:hover { background: var(--w-cream-hover); color: var(--w-ink); }
+
+.w-modal-error {
+  background: var(--w-danger-bg);
+  color: var(--w-danger);
+  border-radius: var(--w-r-sm);
+  padding: 10px var(--w-sp-3);
+  font-size: var(--w-fs-sm);
+  font-weight: 500;
+}
+
+.w-modal-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--w-sp-3);
+  margin-top: var(--w-sp-4);
+}
+
+/* Same double-rhythm fix as grids: the flex gap carries the spacing. */
+.w-modal-form > .w-field {
+  margin-bottom: 0;
+}
+
+.w-modal-actions {
+  display: flex;
+  gap: var(--w-sp-3);
+  margin-top: var(--w-sp-5);
+}
+
+/* ── Dashboard hero status (woven boutique line) ──────────────────── */
+.w-hero-rule {
+  margin-top: var(--w-sp-4);
+  width: 72px;
+  height: 2px;
+}
+
+.w-hero-status {
+  margin-top: var(--w-sp-3);
+  font-size: var(--w-fs-base);
+  color: var(--w-ink-soft);
+  line-height: 1.6;
+  letter-spacing: 0.01em;
+}
+
+.w-hero-status strong {
+  color: var(--w-ink);
+  font-weight: 500;
+}
+
+/* Gold zari thread joining the figures — echoes the rail signature */
+.w-hero-dot {
+  color: var(--w-gold);
+  font-weight: 700;
+  margin: 0 9px;
+}
+
+/* ── Brand mark: real store logo + clickable brand → profile ──────── */
+.w-logomark-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.w-topbar-brand {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  border-radius: var(--w-r-sm);
+  transition: opacity 0.16s var(--w-ease);
+}
+.w-topbar-brand:hover { opacity: 0.82; }
+
+
+/* ── Wearify wordmark ─────────────────────────────────────────────── */
+.w-brand-wordmark {
+  display: block;
+  width: 168px;
+  height: auto;
+}
+.w-brand-wordmark--bar {
+  width: 96px;
+  flex-shrink: 0;
+}
+@media (max-width: 640px) {
+  .w-brand-wordmark--bar { width: 76px; }
+}
