@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@sentry/nextjs": "10.71.0",
-    "@wearify/shared": "link:../wearify-shared",
+    "@wearify/shared": "git+file:///home/abhigna/wearify-shared#v0.1.1",
     "clsx": "2.1.1",
     "convex": "1.43.0",
     "next": "16.1.7",
